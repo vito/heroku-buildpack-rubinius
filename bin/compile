@@ -23,15 +23,23 @@ export LD_LIBRARY_PATH=$prefix/lib
 
 pushd $cache
 
-curl $yaml | tar zxf -
+curl $yaml | tar zxf - | indent
 pushd yaml*
 ./configure --prefix=$prefix | indent
-make install
+make install | indent
 popd
 
-git clone git://github.com/rubinius/rubinius.git
+git clone git://github.com/rubinius/rubinius.git | indent
 pushd rubinius
+set +e
 ./configure --default-version 19 --prefix=$prefix | indent
+if [ $? != 0 ]; then
+  echo
+  echo "Build failed! Here's configure.log:" | indent
+  cat configure.log | indent
+  exit 1
+fi
+set -e
 rake install | indent
 popd
 
