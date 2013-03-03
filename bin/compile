@@ -58,8 +58,10 @@ popd
 popd
 
 echo "-----> Bundling gems"
-gem install bundler
-bundle
+pushd $build
+gem install bundler | indent
+bundle | indent
+popd
 
 echo "-----> Building runtime environment"
 mkdir -p $profile
