@@ -15,7 +15,7 @@ prefix="$1/.rubinius"
 
 mkdir -p $profile $prefix
 
-pushd $cache_dir
+pushd $cache
 
 git clone git://github.com/rubinius/rubinius.git
 pushd rubinius
