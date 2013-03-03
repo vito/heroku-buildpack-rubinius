@@ -10,8 +10,8 @@ indent() {
 mkdir -p "$1" "$2"
 build=$(cd "$1/" && pwd)
 cache=$(cd "$2/" && pwd)
-profile="$1/.profile.d"
-prefix="$1/.rubinius"
+profile="$build/.profile.d"
+prefix="$build/.rubinius"
 yaml="http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz"
 
 mkdir -p $prefix
@@ -42,7 +42,6 @@ echo "-----> Configuring Rubinius"
   --with-lib-dir $prefix/lib --with-include-dir $prefix/include | indent
 
 if [ $? != 0 ]; then
-  echo
   echo "-----> Build failed! Here's configure.log:"
   cat configure.log | indent
   exit 1
@@ -57,9 +56,16 @@ popd
 
 popd
 
-echo "-----> Bundling gems"
+echo "-----> Adding Rubinius gems directory to \$PATH"
+export PATH=$prefix/gems/1.9/bin:$PATH
+
+echo "-----> PATH: $PATH"
+
+echo "-----> Installing Bundler with `which gem`"
 pushd $build
 gem install bundler | indent
+
+echo "-----> Bundling with `which bundler`"
 bundle | indent
 popd
 
