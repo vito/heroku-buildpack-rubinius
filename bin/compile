@@ -65,10 +65,12 @@ echo "-----> Installing Bundler with `which gem`"
 pushd $build
 gem install bundler | indent
 
-echo "-----> Bundling with `which bundler`"
+echo "-----> Bundling with `which bundle`"
 bundle | indent
 popd
 
 echo "-----> Building runtime environment"
 mkdir -p $profile
 echo 'export PATH="$HOME/bin:$HOME/.rubinius/bin:$PATH' > $profile/rubinius.sh
+
+echo '-----> Done!'
