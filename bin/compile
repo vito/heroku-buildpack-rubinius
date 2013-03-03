@@ -29,7 +29,7 @@ pushd yaml*
 make install | indent
 popd
 
-git clone git://github.com/rubinius/rubinius.git | indent
+git clone git://github.com/rubinius/rubinius.git --depth 1 | indent
 pushd rubinius
 set +e
 ./configure --default-version 19 --prefix=$prefix | indent
