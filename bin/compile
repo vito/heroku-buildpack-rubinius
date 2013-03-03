@@ -41,7 +41,7 @@ if [ $? != 0 ]; then
   exit 1
 fi
 set -e
-rake install | indent
+CXXFLAGS=-fPIC CFLAGS=fPIC rake install | indent
 popd
 
 popd
