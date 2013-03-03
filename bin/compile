@@ -38,7 +38,7 @@ pushd rubinius
 set +e
 
 echo "-----> Configuring Rubinius"
-./configure --default-version 19 --prefix=$prefix \
+./configure --enable-version 19 --default-version 19 --prefix=$prefix \
   --with-lib-dir $prefix/lib --with-include-dir $prefix/include | indent
 
 if [ $? != 0 ]; then
