@@ -12,10 +12,22 @@ build=$(cd "$1/" && pwd)
 cache=$(cd "$2/" && pwd)
 profile="$1/.profile.d"
 prefix="$1/.rubinius"
+yaml="http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz"
 
 mkdir -p $profile $prefix
 
+export PATH=$prefix/bin:$PATH
+export LANG=en_US.UTF-8
+export LIBRARY_PATH=$prefix/lib
+export LD_LIBRARY_PATH=$prefix/lib
+
 pushd $cache
+
+curl $yaml | tar zxf -
+pushd yaml*
+./configure --prefix=$prefix | indent
+make install
+popd
 
 git clone git://github.com/rubinius/rubinius.git
 pushd rubinius
