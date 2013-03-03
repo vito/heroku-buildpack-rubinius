@@ -1,0 +1,35 @@
+#!/bin/bash
+# usage: bin/compile <build-dir> <cache-dir>
+
+set -eo pipefail
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+mkdir -p "$1" "$2"
+build=$(cd "$1/" && pwd)
+cache=$(cd "$2/" && pwd)
+profile="$1/.profile.d"
+prefix="$1/.rubinius"
+
+mkdir -p $profile $prefix
+
+pushd $cache_dir
+
+git clone git://github.com/rubinius/rubinius.git
+pushd rubinius
+./configure --default-version 19 --prefix=$prefix | indent
+rake install | indent
+popd
+
+git clone git://github.com/vito/atomy.git
+pushd atomy
+rake install
+popd
+
+popd
+
+cat > $profile/rubinius.sh <<EOF
+export PATH=$HOME/.rubinius/bin:$PATH
+EOF
