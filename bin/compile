@@ -72,4 +72,7 @@ echo "-----> Building runtime environment"
 mkdir -p $profile
 echo 'export PATH="$HOME/bin:$HOME/.rubinius/gems/1.9/bin:$HOME/.rubinius/bin:$PATH"' > $profile/rubinius.sh
 
+echo "-----> Testing Atomy"
+bundle exec atomy -e 'use("atomy"), puts("hi")'
+
 echo '-----> Done!'
