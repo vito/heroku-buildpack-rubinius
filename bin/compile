@@ -66,9 +66,6 @@ gem install bundler | indent
 
 echo "-----> Bundling with `which bundle`"
 bundle | indent
-
-echo "-----> Testing Atomy"
-bundle exec atomy -e 'use("atomy"), puts("hi")'
 popd
 
 echo "-----> Building runtime environment"

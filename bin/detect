@@ -1,5 +1,5 @@
 #!/bin/sh
 
 # TODO
-echo "Ruby/Rails"
+echo "Ruby"
 exit 0
