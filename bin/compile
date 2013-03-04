@@ -31,8 +31,7 @@ make install | indent
 popd
 
 echo "-----> Cloning Rubinius master"
-git clone git://github.com/rubinius/rubinius.git --quiet --depth 1 | indent
-
+git clone git://github.com/rubinius/rubinius.git --quiet --depth 1
 pushd rubinius
 
 set +e
@@ -71,6 +70,6 @@ popd
 
 echo "-----> Building runtime environment"
 mkdir -p $profile
-echo 'export PATH="$HOME/bin:$HOME/.rubinius/bin:$PATH' > $profile/rubinius.sh
+echo 'export PATH="$HOME/bin:$HOME/.rubinius/gems/1.9/bin:$HOME/.rubinius/bin:$PATH"' > $profile/rubinius.sh
 
 echo '-----> Done!'
