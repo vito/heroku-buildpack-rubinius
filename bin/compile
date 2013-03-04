@@ -53,6 +53,10 @@ CXXFLAGS=-fPIC CFLAGS=fPIC rake install | indent
 
 popd
 
+echo "-----> Cleaning up"
+rm -rf rubinius
+rm -rf yaml*
+
 popd
 
 echo "-----> Adding Rubinius gems directory to \$PATH"
