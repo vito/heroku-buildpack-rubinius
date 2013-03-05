@@ -30,13 +30,19 @@ pushd yaml*
 make install | indent
 popd
 
-echo "-----> Cloning Rubinius master"
-git clone git://github.com/rubinius/rubinius.git --quiet --depth 1
-pushd rubinius
+if [ -d $build/rubinius ]; then
+  echo "-----> Using vendored Rubinius"
+  pushd $build/rubinius
+else
+  echo "-----> Cloning Rubinius master"
+  git clone git://github.com/rubinius/rubinius.git --quiet --depth 1
+  pushd rubinius
+fi
 
 set +e
 
 echo "-----> Configuring Rubinius"
+
 ./configure --enable-version 19 --default-version 19 --prefix=$prefix \
   --with-lib-dir $prefix/lib --with-include-dir $prefix/include | indent
 
