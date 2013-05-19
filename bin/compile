@@ -23,6 +23,9 @@ export LD_LIBRARY_PATH=$prefix/lib
 
 pushd $cache
 
+  echo "-----> Cache:"
+  find . -maxdepth 2 | indent
+
   echo "-----> Installing PyYAML"
   [ -e yaml* ] || curl $yaml | tar zxf - | indent
   pushd yaml*
