@@ -55,6 +55,11 @@ function install_rubinius {
   popd
 }
 
+echo "-----> Adding Rubinius gems directory to \$PATH"
+export PATH=$prefix/gems/1.9/bin:$PATH
+
+echo "-----> PATH: $PATH"
+
 if [ -d $cache/rubinius ]; then
   echo "-----> Using cached build"
   cp -r $cache/rubinius $prefix
@@ -71,25 +76,26 @@ else
     rm -rf rubinius
     rm -rf yaml*
 
+    echo "-----> Installing Bundler with `which gem`"
+    gem install bundler | indent
+
     echo "-----> Caching built Ruby"
     cp -r $prefix rubinius
 
   popd
 fi
 
-echo "-----> Adding Rubinius gems directory to \$PATH"
-export PATH=$prefix/gems/1.9/bin:$PATH
-
-echo "-----> PATH: $PATH"
-
-echo "-----> Installing Bundler with `which gem`"
-pushd $build
-gem install bundler | indent
+if [ -d $cache/vendor ]; then
+  echo "-----> Restoring cached gems"
+  cp -r $cache/vendor $build/vendor
+fi
 
 echo "-----> Bundling with `which bundle`"
-bundle install --without development:test --path vendor/bundle \
-  --binstubs vendor/bundle/bin --deployment | indent
-popd
+bundle install --without development:test --path $build/vendor/bundle \
+  --binstubs $build/vendor/bundle/bin --deployment | indent
+
+echo "-----> Caching installed gems"
+cp -r $build/vendor $cache/vendor
 
 echo "-----> Building runtime environment"
 mkdir -p $profile
