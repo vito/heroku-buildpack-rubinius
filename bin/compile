@@ -58,6 +58,7 @@ function install_rubinius {
 }
 
 if [ -d $cache/rubinius ]; then
+  echo "-----> Using cached build"
   cp -r $cache/rubinius $prefix
 else
   pushd $cache
