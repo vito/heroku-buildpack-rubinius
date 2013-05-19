@@ -23,45 +23,42 @@ export LD_LIBRARY_PATH=$prefix/lib
 
 pushd $cache
 
-echo "-----> Installing PyYAML"
-curl $yaml | tar zxf - | indent
-pushd yaml*
-./configure --prefix=$prefix | indent
-make install | indent
-popd
+  echo "-----> Installing PyYAML"
+  [ -e yaml* ] || curl $yaml | tar zxf - | indent
+  pushd yaml*
+    ./configure --prefix=$prefix | indent
+    make install | indent
+  popd
 
-if [ -d $build/rubinius ]; then
-  echo "-----> Using vendored Rubinius"
-  pushd $build/rubinius
-else
-  echo "-----> Cloning Rubinius master"
-  git clone git://github.com/rubinius/rubinius.git --quiet --depth 1
+  if [ -d rubinius ]; then
+    echo "-----> Using cloned Rubinius"
+    # TODO: pull from master?
+  else
+    echo "-----> Cloning Rubinius master"
+    git clone git://github.com/rubinius/rubinius.git --depth 1
+  fi
+
   pushd rubinius
-fi
 
-set +e
+    set +e
 
-echo "-----> Configuring Rubinius"
+    echo "-----> Configuring Rubinius"
 
-./configure --enable-version 19 --default-version 19 --prefix=$prefix \
-  --with-lib-dir $prefix/lib --with-include-dir $prefix/include | indent
+    ./configure --enable-version 19 --default-version 19 --prefix=$prefix \
+      --with-lib-dir $prefix/lib --with-include-dir $prefix/include | indent
 
-if [ $? != 0 ]; then
-  echo "-----> Build failed! Here's configure.log:"
-  cat configure.log | indent
-  exit 1
-fi
+    if [ $? != 0 ]; then
+      echo "-----> Build failed! Here's configure.log:"
+      cat configure.log | indent
+      exit 1
+    fi
 
-set -e
+    set -e
 
-echo "-----> Building & installing Rubinius"
-CXXFLAGS=-fPIC CFLAGS=fPIC rake install | indent
+    echo "-----> Building & installing Rubinius"
+    CXXFLAGS=-fPIC CFLAGS=fPIC rake install | indent
 
-popd
-
-echo "-----> Cleaning up"
-rm -rf rubinius
-rm -rf yaml*
+  popd
 
 popd
 
