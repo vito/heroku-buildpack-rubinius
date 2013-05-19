@@ -82,20 +82,24 @@ else
   popd
 fi
 
-if [ -d $cache/vendor ]; then
-  echo "-----> Restoring cached gems"
-  cp -r $cache/vendor $build/vendor
-fi
+pushd $build
 
-echo "-----> Installing Bundler with `which gem`"
-gem install bundler | indent
+  if [ -d $cache/vendor ]; then
+    echo "-----> Restoring cached gems"
+    cp -r $cache/vendor $build/vendor
+  fi
 
-echo "-----> Bundling with `which bundle`"
-bundle install --without development:test --path $build/vendor/bundle \
-  --binstubs $build/vendor/bundle/bin --deployment | indent
+  echo "-----> Installing Bundler with `which gem`"
+  gem install bundler | indent
 
-echo "-----> Caching installed gems"
-cp -r $build/vendor $cache/vendor
+  echo "-----> Bundling with `which bundle`"
+  bundle install --without development:test --path $build/vendor/bundle \
+    --binstubs $build/vendor/bundle/bin --deployment | indent
+
+  echo "-----> Caching installed gems"
+  cp -r $build/vendor $cache/vendor
+
+popd
 
 echo "-----> Building runtime environment"
 mkdir -p $profile
