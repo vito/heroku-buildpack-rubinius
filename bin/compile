@@ -60,9 +60,9 @@ export PATH=$prefix/gems/1.9/bin:$PATH
 
 echo "-----> PATH: $PATH"
 
-if [ -d $cache/rubinius ]; then
+if [ -d $cache/.rubinius ]; then
   echo "-----> Using cached build"
-  cp -r $cache/rubinius $prefix
+  cp -r $cache/.rubinius $prefix
   ls -al $prefix | indent
 else
   mkdir -p $prefix
@@ -76,32 +76,30 @@ else
     rm -rf rubinius
     rm -rf yaml*
 
-    echo "-----> Caching built Ruby"
-    cp -r $prefix rubinius
+    echo "-----> Installing Bundler with `which gem`"
+    gem install bundler --no-rdoc --no-ri | indent
 
   popd
+
+  echo "-----> Caching built Ruby"
+  cp -r $prefix $cache/.rubinius
+fi
+
+if [ -d $cache/vendor ]; then
+  echo "-----> Restoring cached gems"
+  cp -r $cache/vendor /app/vendor
 fi
 
 pushd $build
-
-  if [ -d $cache/vendor ]; then
-    echo "-----> Restoring cached gems"
-    cp -r $cache/vendor /app/vendor
-  fi
-
-  if ! type bundle > /dev/null 2>&1; then
-    echo "-----> Installing Bundler with `which gem`"
-    gem install bundler --no-rdoc --no-ri | indent
-  fi
 
   echo "-----> Bundling with `which bundle`"
   bundle install --without development:test --path /app/vendor/bundle \
     --binstubs /app/vendor/bundle/bin --deployment | indent
 
-  echo "-----> Caching installed gems"
-  cp -r /app/vendor $cache/vendor
-
 popd
+
+echo "-----> Caching installed gems"
+cp -r /app/vendor $cache/vendor
 
 echo "-----> Building runtime environment"
 mkdir -p $profile
