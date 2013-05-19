@@ -76,9 +76,6 @@ else
     rm -rf rubinius
     rm -rf yaml*
 
-    echo "-----> Installing Bundler with `which gem`"
-    gem install bundler | indent
-
     echo "-----> Caching built Ruby"
     cp -r $prefix rubinius
 
@@ -89,6 +86,9 @@ if [ -d $cache/vendor ]; then
   echo "-----> Restoring cached gems"
   cp -r $cache/vendor $build/vendor
 fi
+
+echo "-----> Installing Bundler with `which gem`"
+gem install bundler | indent
 
 echo "-----> Bundling with `which bundle`"
 bundle install --without development:test --path $build/vendor/bundle \
