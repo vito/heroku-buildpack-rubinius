@@ -90,7 +90,7 @@ pushd $build
   fi
 
   echo "-----> Installing Bundler with `which gem`"
-  gem install bundler | indent
+  gem install bundler --no-doc --no-ri | indent
 
   echo "-----> Bundling with `which bundle`"
   bundle install --without development:test --path $build/vendor/bundle \
