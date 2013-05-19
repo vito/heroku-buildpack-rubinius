@@ -58,7 +58,7 @@ function install_rubinius {
 }
 
 if [ -d $cache/rubinius ]; then
-  cp -r $cache/rubinius $build/.rubinius
+  cp -r $cache/rubinius $prefix
 else
   pushd $cache
 
