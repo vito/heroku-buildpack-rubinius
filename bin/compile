@@ -14,8 +14,6 @@ profile="$build/.profile.d"
 prefix="/app/.rubinius"
 yaml="http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz"
 
-mkdir -p $prefix
-
 export PATH=$prefix/bin:$PATH
 export LANG=en_US.UTF-8
 export LIBRARY_PATH=$prefix/lib
@@ -62,6 +60,8 @@ if [ -d $cache/rubinius ]; then
   cp -r $cache/rubinius $prefix
   ls -al $prefix | indent
 else
+  mkdir -p $prefix
+
   pushd $cache
 
     install_yaml
