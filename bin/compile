@@ -89,8 +89,10 @@ pushd $build
     cp -r $cache/vendor $build/vendor
   fi
 
-  echo "-----> Installing Bundler with `which gem`"
-  gem install bundler --no-doc --no-ri | indent
+  if ! type bundle > /dev/null 2>&1; then
+    echo "-----> Installing Bundler with `which gem`"
+    gem install bundler --no-rdoc --no-ri | indent
+  fi
 
   echo "-----> Bundling with `which bundle`"
   bundle install --without development:test --path $build/vendor/bundle \
