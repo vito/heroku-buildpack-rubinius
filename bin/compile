@@ -21,25 +21,18 @@ export LANG=en_US.UTF-8
 export LIBRARY_PATH=$prefix/lib
 export LD_LIBRARY_PATH=$prefix/lib
 
-pushd $cache
-
-  echo "-----> Cache:"
-  find . -maxdepth 2 | indent
-
+function install_yaml {
   echo "-----> Installing PyYAML"
   [ -e yaml* ] || curl $yaml | tar zxf - | indent
   pushd yaml*
     ./configure --prefix=$prefix | indent
     make install | indent
   popd
+}
 
-  if [ -d rubinius ]; then
-    echo "-----> Using cloned Rubinius"
-    # TODO: pull from master?
-  else
-    echo "-----> Cloning Rubinius master"
-    git clone git://github.com/rubinius/rubinius.git --depth 1
-  fi
+function install_rubinius {
+  echo "-----> Cloning Rubinius master"
+  git clone git://github.com/rubinius/rubinius.git --depth 1
 
   pushd rubinius
 
@@ -62,8 +55,25 @@ pushd $cache
     CXXFLAGS=-fPIC CFLAGS=fPIC rake install | indent
 
   popd
+}
 
-popd
+if [ -d $cache/rubinius ]; then
+  cp -r $cache/rubinius $build/.rubinius
+else
+  pushd $cache
+
+    install_yaml
+    install_rubinius
+
+    echo "-----> Cleaning up"
+    rm -rf rubinius
+    rm -rf yaml*
+
+    echo "-----> Caching built Ruby"
+    cp -r $prefix rubinius
+
+  popd
+fi
 
 echo "-----> Adding Rubinius gems directory to \$PATH"
 export PATH=$prefix/gems/1.9/bin:$PATH
