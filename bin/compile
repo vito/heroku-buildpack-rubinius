@@ -63,7 +63,6 @@ echo "-----> PATH: $PATH"
 if [ -d $cache/.rubinius ]; then
   echo "-----> Using cached build"
   cp -r $cache/.rubinius $prefix
-  ls -al $prefix | indent
 else
   mkdir -p $prefix
 
