@@ -86,7 +86,7 @@ pushd $build
 
   if [ -d $cache/vendor ]; then
     echo "-----> Restoring cached gems"
-    cp -r $cache/vendor $build/vendor
+    cp -r $cache/vendor /app/vendor
   fi
 
   if ! type bundle > /dev/null 2>&1; then
@@ -95,11 +95,11 @@ pushd $build
   fi
 
   echo "-----> Bundling with `which bundle`"
-  bundle install --without development:test --path $build/vendor/bundle \
-    --binstubs $build/vendor/bundle/bin --deployment | indent
+  bundle install --without development:test --path /app/vendor/bundle \
+    --binstubs /app/vendor/bundle/bin --deployment | indent
 
   echo "-----> Caching installed gems"
-  cp -r $build/vendor $cache/vendor
+  cp -r /app/vendor $cache/vendor
 
 popd
 
@@ -114,6 +114,7 @@ export RACK_ENV=\${RACK_ENV:-production}
 EOF
 
 echo "-----> Moving built Rubinius to build dir"
-mv $prefix $build
+mv /app/.rubinius $build
+mv /app/vendor $build
 
 echo "-----> Done!"
