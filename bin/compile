@@ -92,7 +92,7 @@ if [ -d $cache/vendor ]; then
 fi
 
 echo "-----> Bundling with `which bundle`"
-BUNDLE_GEMFILE=$build/Gemfile bundle install --without development:test \
+bundle install --without development:test \
   --path /app/vendor/bundle \ --binstubs /app/vendor/bundle/bin \
   --deployment | indent
 
