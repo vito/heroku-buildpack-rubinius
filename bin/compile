@@ -105,7 +105,7 @@ mkdir -p $profile
 cat > $profile/rubinius.sh <<EOF
 export GEM_PATH="\$HOME/vendor/bundle/rbx/1.9:\$HOME/.rubinius/gems/1.9:\$GEM_PATH"
 export LANG=\${LANG:-en_US.UTF-8}
-export PATH="\$HOME/bin:\$HOME/vendor/bundle/rbx/1.9/bin:\$HOME/.rubinius/gems/1.9/bin:\$HOME/.rubinius/bin:/var/vcap/packages/libpq/bin:/var/vcap/packages/dea_node08/bin:/var/vcap/packages/git/bin:/var/vcap/packages/imagemagick/bin:/var/vcap/packages/dea_next/vendor/bundle/ruby/1.9.1/bin:/var/vcap/packages/ruby_next/bin:/bin:/usr/bin:/sbin:/usr/sbin:\$PATH"
+export PATH="\$HOME/bin:\$HOME/vendor/bundle/rbx/1.9/bin:\$HOME/.rubinius/gems/1.9/bin:\$HOME/.rubinius/bin:/usr/bin:/usr/sbin:/bin:/sbin:\$PATH"
 export RACK_ENV=\${RACK_ENV:-production}
 EOF
 
