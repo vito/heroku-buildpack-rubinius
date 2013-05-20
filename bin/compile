@@ -19,6 +19,8 @@ export LANG=en_US.UTF-8
 export LIBRARY_PATH=$prefix/lib
 export LD_LIBRARY_PATH=$prefix/lib
 
+cd $build
+
 function install_yaml {
   echo "-----> Installing PyYAML"
   [ -e yaml* ] || curl $yaml | tar zxf - | indent
@@ -89,13 +91,10 @@ if [ -d $cache/vendor ]; then
   cp -r $cache/vendor /app/vendor
 fi
 
-pushd $build
-
-  echo "-----> Bundling with `which bundle`"
-  bundle install --without development:test --path /app/vendor/bundle \
-    --binstubs /app/vendor/bundle/bin --deployment | indent
-
-popd
+echo "-----> Bundling with `which bundle`"
+BUNDLE_GEMFILE=$build/Gemfile bundle install --without development:test \
+  --path /app/vendor/bundle \ --binstubs /app/vendor/bundle/bin \
+  --deployment | indent
 
 echo "-----> Caching installed gems"
 cp -r /app/vendor $cache/vendor
